@@ -1,0 +1,65 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+project.ext {
+	jacocoVersion = '0.8.2'
+	lombokVersion = '1.16.10'
+}
+
+group = 'com.module.reportsMgt'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+jar {
+	baseName = 'InnoReports-REST-Server'
+	version =  '1.0.0'
+}
+
+bootJar {
+	baseName = 'gs-spring-boot'
+	version =  '0.1.0'
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+
+	// JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
+	//compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// Use MySQL Connector-J
+	//compile 'mysql:mysql-connector-java'
+
+	//compile("org.springframework:spring-jdbc")
+	//compile("com.h2database:h2:1.4.191")
+
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
+	//lombok
+	compileOnly 'org.projectlombok:lombok:' + lombokVersion
+	testCompileOnly 'org.projectlombok:lombok:' + lombokVersion
+	annotationProcessor 'org.projectlombok:lombok:' + lombokVersion
+
+
+
+}
