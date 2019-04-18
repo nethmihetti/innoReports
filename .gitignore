@@ -30,4 +30,4 @@ HELP.md
 .vscode/
 
 /gradle
-/src
+/out
