@@ -1,2 +1,1 @@
-include 'authorization'
-include 'reportsMgt'
+rootProject.name = 'innorReports'
