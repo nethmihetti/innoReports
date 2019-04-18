@@ -33,7 +33,7 @@ jar {
 }
 
 bootJar {
-	baseName = 'gs-spring-boot'
+	baseName = 'InnoReports-REST-Server'
 	version =  '0.1.0'
 }
 
