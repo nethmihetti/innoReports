@@ -2,10 +2,12 @@ package com.module.reportsMgt.entities;
 
 import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.enums.ReportTagEnum;
+import com.module.reportsMgt.enums.ReportTagEnumList;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -16,12 +18,14 @@ public class ReportEntity {
     private String description;
     private String location;
     private String imagePath;
+    private String date;
     private ReportStatusEnum status;
-    private List<ReportTagEnum> tags;
+        private List<ReportTagEnum> tags;
+//    private ReportTagEnumList tags;
 
-    public ReportEntity(String title, String description) {
-        this.title = title;
-        this.description = description;
+    public ReportEntity() {
+//        this.tags = new ReportTagEnumList();
+        this.tags = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -70,5 +74,13 @@ public class ReportEntity {
 
     public void setTags(List<ReportTagEnum> tags) {
         this.tags = tags;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

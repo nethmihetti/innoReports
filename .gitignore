@@ -31,3 +31,9 @@ HELP.md
 
 /gradle
 /out
+
+### Other ###
+*.jpg
+*.png
+*.p12
+ServiceAccountKey.json
