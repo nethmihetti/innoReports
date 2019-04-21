@@ -1,9 +1,12 @@
 package com.module.reportsMgt.service.impl;
 
-import com.module.reportsMgt.entities.ReportEntity;
-import com.module.reportsMgt.entities.ReportEntityList;
-import com.module.reportsMgt.service.ReportService;
+import com.module.reportsMgt.models.ReportModel;
+import com.module.reportsMgt.models.ReportModelList;
+import com.module.reportsMgt.service.intr.ReportService;
 import com.module.reportsMgt.utils.ReportUrls;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,36 +26,46 @@ class ReportServiceIMPL implements ReportService {
     }
 
     @Override
-    public ReportEntity save(ReportEntity reportEntity) {
+    public ReportModel save(ReportModel reportModel) {
         RestTemplate restTemplate = new RestTemplate();
-        ReportEntity result = restTemplate.postForObject(ReportUrls.ApiUruls.REPORT_POST_URL, reportEntity, ReportEntity.class);
+        ReportModel result = restTemplate.postForObject(ReportUrls.ApiUruls.StorageUrls.REPORT_POST_URL, reportModel, ReportModel.class);
         return result;
     }
 
     @Override
-    public List<ReportEntity> getAll() {
+    public List<ReportModel> getAll() {
         RestTemplate restTemplate = new RestTemplate();
-        ReportEntityList reportList = restTemplate.getForObject(ReportUrls.ApiUruls.REPORTS_URL, ReportEntityList.class);
-        List<ReportEntity> reportEntities = reportList.getReports();
-        return reportEntities;
+        ReportModelList reportList = restTemplate.getForObject(ReportUrls.ApiUruls.StorageUrls.REPORTS_URL, ReportModelList.class);
+
+        ResponseEntity<List<ReportModel>> response = restTemplate.exchange(
+                ReportUrls.ApiUruls.ClassificationUrls.TAG_URLS,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ReportModel>>(){});
+
+        return response.getBody();
     }
 
     @Override
-    public List<ReportEntity> getAllByUserEmail(String email) {
+    public List<ReportModel> getAllByUserEmail(String email) {
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> params = new HashMap<>();
         params.put("user_email", email);
-        ReportEntityList reportList = restTemplate.getForObject(ReportUrls.ApiUruls.REPORTS_URL, ReportEntityList.class, params);
-        List<ReportEntity> reportEntities = reportList.getReports();
-        return reportEntities;
+        ResponseEntity<List<ReportModel>> response = restTemplate.exchange(
+                ReportUrls.ApiUruls.ClassificationUrls.TAG_URLS,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ReportModel>>(){},
+                params);
+        return response.getBody();
     }
 
     @Override
-    public ReportEntity getById(int id) {
+    public ReportModel getById(int id) {
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> params = new HashMap<>();
         params.put("report_id", id + "");
-        ReportEntity reportEntity = restTemplate.getForObject(ReportUrls.ApiUruls.REPORT_URL, ReportEntity.class, params);
-        return reportEntity;
+        ReportModel reportModel = restTemplate.getForObject(ReportUrls.ApiUruls.StorageUrls.REPORT_URL, ReportModel.class, params);
+        return reportModel;
     }
 }

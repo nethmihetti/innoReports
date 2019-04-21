@@ -15,17 +15,23 @@ public class ReportUrls {
     }
 
     public interface ApiUruls {
-        String BASE_URL = "http://localhost:8080";
+        interface StorageUrls {
+            String BASE_URL = "http://localhost:8080";
 
-        String REPORTS_URL = BASE_URL + "/reports";
+            String REPORTS_URL = BASE_URL + "/reports";
 
-        String USER_REPORTS_URL = REPORTS_URL + "/{user_email}";
+            String USER_REPORTS_URL = REPORTS_URL + "/{user_email}";
 
-        String REPORT_URL = REPORTS_URL + "/{report_id}";
+            String REPORT_URL = REPORTS_URL + "/{report_id}";
 
-        String REPORT_POST_URL = REPORTS_URL + "/createreport";
+            String REPORT_POST_URL = REPORTS_URL + "/createreport";
+        }
 
+        interface ClassificationUrls {
+            String BASE_URL = "http://10.240.20.170:8080";
 
+            String TAG_URLS = BASE_URL + "/classification/classify/{tags}";
+        }
     }
 
 }

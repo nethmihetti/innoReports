@@ -1,18 +1,16 @@
-package com.module.reportsMgt.entities;
+package com.module.reportsMgt.models;
 
 import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.enums.ReportTagEnum;
-import com.module.reportsMgt.enums.ReportTagEnumList;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-public class ReportEntity {
+public class ReportModel {
 
     private String title;
     private String description;
@@ -20,10 +18,11 @@ public class ReportEntity {
     private String imagePath;
     private String date;
     private ReportStatusEnum status;
-        private List<ReportTagEnum> tags;
+    private List<ReportTagEnum> tags;
+    private List<EntityModel> entities;
 //    private ReportTagEnumList tags;
 
-    public ReportEntity() {
+    public ReportModel() {
 //        this.tags = new ReportTagEnumList();
         this.tags = new ArrayList<>();
     }
@@ -82,5 +81,13 @@ public class ReportEntity {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public List<EntityModel> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(List<EntityModel> entities) {
+        this.entities = entities;
     }
 }
