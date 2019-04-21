@@ -2,14 +2,10 @@ package com.module.reportsMgt.models;
 
 import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.enums.ReportTagEnum;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 public class ReportModel {
 
     private String title;

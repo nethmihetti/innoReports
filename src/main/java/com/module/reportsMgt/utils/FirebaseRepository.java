@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 @Component
 public class FirebaseRepository {
@@ -34,7 +36,7 @@ public class FirebaseRepository {
     }
 
 
-//    public void saveFile(String file) throws IOException {
+    //    public void saveFile(String file) throws IOException {
 //        File file1 = new File("Jazz.jpg");
 //        InputStream content = new FileInputStream(file1);
 //
@@ -55,28 +57,48 @@ public class FirebaseRepository {
 //
 //        System.out.println(blob);
 //    }
-    public void saveFile(String file) throws IOException {
-        File file1 = new File("Jazz.jpg");
+    public String saveFile(String file) throws IOException, NoSuchAlgorithmException {
+        File file1 = new File(file);
         InputStream content = new FileInputStream(file1);
 
-        String blobName = "Jazz7.jpg";
-
+        String filename = generateRandomFileName();
 
         DatabaseReference dRef = FirebaseDatabase.getInstance().getReference();
-
-        String jazz = "Jazz01";
-
         Bucket bucket = StorageClient.getInstance().bucket();
-        Blob blob = bucket.create(blobName, content);
-        System.out.println(blob.getMediaLink());
-        System.out.println(blob.getSelfLink());
+
+        Blob blob = bucket.create(filename + getFileExtension(file), content);
 
         System.out.println(blob.getSelfLink());
-        dRef.child("report-images").child("fileid07").setValue(blob.getSelfLink(), (error, ref) -> {
-            System.out.println(ref);
+        dRef.child("report-images").child(filename).setValue(blob.getMediaLink(), (error, ref) -> {
         });
 
-        System.out.println(blob);
+        return blob.getMediaLink();
+    }
+
+    public static String getFileExtension(final String path) {
+        if (path != null && path.lastIndexOf('.') != -1) {
+            return path.substring(path.lastIndexOf('.'));
+        }
+        return null;
+    }
+
+
+    public static String getFileName(String fileName) {
+        return fileName.substring(0, fileName.lastIndexOf('.'));
+    }
+
+    public static String generateRandomFileName() {
+        String POSSIBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 13) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * POSSIBLE.length());
+            salt.append(POSSIBLE.charAt(index));
+        }
+        String result = salt.toString();
+        return result;
+
+
     }
 
 }

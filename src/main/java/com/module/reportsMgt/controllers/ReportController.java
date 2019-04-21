@@ -1,18 +1,20 @@
 package com.module.reportsMgt.controllers;
 
-import com.module.reportsMgt.models.EntityModel;
-import com.module.reportsMgt.models.ReportModel;
 import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.enums.ReportTagEnum;
+import com.module.reportsMgt.models.EntityModel;
+import com.module.reportsMgt.models.ReportModel;
 import com.module.reportsMgt.service.intr.ClassificationService;
 import com.module.reportsMgt.service.intr.ReportService;
 import com.module.reportsMgt.utils.FirebaseRepository;
+import com.module.reportsMgt.utils.ReportChecker;
 import com.module.reportsMgt.utils.ReportUrls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,9 +51,9 @@ public class ReportController {
     }
 
     @RequestMapping(path = ReportUrls.LocalUrls.REPORT_IMAGE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void saveImage(String filename) throws IOException {
+    public void saveImage(String filename) throws IOException, NoSuchAlgorithmException {
         FirebaseRepository fr = new FirebaseRepository();
-        fr.saveFile(filename);
+        fr.saveFile("Банан.PNG");
         System.out.println();
     }
 
@@ -66,7 +68,7 @@ public class ReportController {
         reportModel.setStatus(ReportStatusEnum.IN_PROGRESS);
         reportModel.setImagePath("Image Path");
         reportModel.setEntities(new ArrayList<>());
-        reportModel.setImagePath("https://firebasestorage.googleapis.com/v0/b/innoreport-66483.appspot.com/o/Jazz6.jpg?alt=media&token=4dbd2be6-8411-494c-9e63-1212f0ad912c");
+        reportModel.setImagePath("https://www.googleapis.com/download/storage/v1/b/innoreport-66483.appspot.com/o/%D0%91%D0%B0%D0%BD%D0%B0%D0%BD.PNG?generation=1555855353369369&alt=media");
 
         reportModel.getTags().add(ReportTagEnum.MEDICINE);
         reportModel.getTags().add(ReportTagEnum.ELECTRICITY);
@@ -80,18 +82,13 @@ public class ReportController {
     public @ResponseBody
 //    ResponseEntity<ReportModel> createReport(@RequestParam String title, @RequestParam String description, @RequestParam String location, @RequestParam ReportTagEnumList tags) {
     ReportModel createReport(@RequestBody ReportModel reportModel) {
-//        ReportModel reportModel = new ReportModel(title, description);
-//        reportModel.setLocation(location);
-        //IMPLEMENT FIREBASE SAVING!
-//        reportModel.setImagePath(file.getName());
+        ReportChecker.checkTitle(reportModel);
+        ReportChecker.checkTitle(reportModel);
         List<EntityModel> entities = classificationService.getServices(reportModel.getTags());
         reportModel.setEntities(entities);
         reportModel.setStatus(ReportStatusEnum.IN_PROGRESS);
-        //QUESTINABLE ABOUT ENUMS
-//        reportModel.setTags(tags.getTags());
         ReportModel result = this.reportService.save(reportModel);
         return result;
     }
-
 
 }

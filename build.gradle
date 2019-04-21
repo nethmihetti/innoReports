@@ -1,28 +1,24 @@
 buildscript {
-	repositories {
-		google()
-		mavenCentral()
-		jcenter()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
-		classpath 'com.google.firebase:firebase-storage:16.1.0'
-		classpath 'com.android.tools.build:gradle:3.3.2'
-		classpath 'com.google.gms:google-services:4.2.0'
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.30"
-	}
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.google.gms:google-services:4.2.0'
+    }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.google.gms.google-services'
-
 
 project.ext {
-	jacocoVersion = '0.8.2'
-	lombokVersion = '1.16.10'
+    jacocoVersion = '0.8.2'
+    lombokVersion = '1.16.10'
 }
 
 group = 'com.module.reportsMgt'
@@ -32,38 +28,40 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	google()
-	jcenter()
+    mavenCentral()
+    google()
+    jcenter()
 }
 
 jar {
-	baseName = 'InnoReports-REST-Server'
-	version =  '1.0.0'
+    baseName = 'InnoReports-REST-Server'
+    version = '1.0.0'
 }
 
 bootJar {
-	baseName = 'gs-spring-boot'
-	version =  '0.1.0'
+    baseName = 'gs-spring-boot'
+    version = '0.1.0'
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-web')
 
-	//firebase
-	implementation 'com.google.firebase:firebase-admin:6.8.0'
-	implementation 'com.google.firebase:firebase-core:16.0.8'
-	implementation 'com.google.firebase:firebase-storage:16.1.0'
-	implementation 'com.google.firebase:firebase-database:16.1.0'
-	implementation 'com.google.firebase:firebase-firestore:18.2.0'
+    implementation "com.android.support:support-v4:28.0.0"
+    implementation "com.android.support:appcompat-v7:28.0.0"
+    implementation "com.google.firebase:firebase-storage:16.1.0"
 
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-	//lombok
-	compileOnly 'org.projectlombok:lombok:' + lombokVersion
-	testCompileOnly 'org.projectlombok:lombok:' + lombokVersion
-	annotationProcessor 'org.projectlombok:lombok:' + lombokVersion
+    //firebase
+    implementation 'com.google.firebase:firebase-admin:6.8.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-database:16.1.0'
+    implementation 'com.google.firebase:firebase-firestore:18.2.0'
 
+    implementation "com.google.firebase:firebase-storage:16.1.0"
 
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    //lombok
+    compileOnly 'org.projectlombok:lombok:' + lombokVersion
+    testCompileOnly 'org.projectlombok:lombok:' + lombokVersion
+    annotationProcessor 'org.projectlombok:lombok:' + lombokVersion
 }

@@ -1,7 +1,6 @@
 package com.module.reportsMgt.service.impl;
 
 import com.module.reportsMgt.models.ReportModel;
-import com.module.reportsMgt.models.ReportModelList;
 import com.module.reportsMgt.service.intr.ReportService;
 import com.module.reportsMgt.utils.ReportUrls;
 import org.springframework.core.ParameterizedTypeReference;
@@ -35,7 +34,6 @@ class ReportServiceIMPL implements ReportService {
     @Override
     public List<ReportModel> getAll() {
         RestTemplate restTemplate = new RestTemplate();
-        ReportModelList reportList = restTemplate.getForObject(ReportUrls.ApiUruls.StorageUrls.REPORTS_URL, ReportModelList.class);
 
         ResponseEntity<List<ReportModel>> response = restTemplate.exchange(
                 ReportUrls.ApiUruls.ClassificationUrls.TAG_URLS,
