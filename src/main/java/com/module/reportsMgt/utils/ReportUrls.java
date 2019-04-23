@@ -6,13 +6,11 @@ public class ReportUrls {
 
         String REPORTS_URL = "/reports";
 
-        String CREATE_REPORT_URL = "/reports/create";
-
-        String REPORT_IMAGE = REPORTS_URL + "/image";
+        String CREATE_REPORT_URL = REPORTS_URL + "/create";
 
         String REPORT_URL = REPORTS_URL + "/{report_id}";
 
-        String USER_REPORTS_URL = REPORTS_URL + "/{user_email}";
+        String USER_REPORTS_URL = REPORTS_URL + "/userReports";
 
     }
 

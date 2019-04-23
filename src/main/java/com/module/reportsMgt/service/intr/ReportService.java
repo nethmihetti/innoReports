@@ -12,9 +12,11 @@ public interface ReportService {
 
     public List<ReportModel> getAll();
 
-    public List<ReportModel> getAllByUserEmail(String email);
+//    public List<ReportModel> getAllByUserEmail(String email);
 
     public ReportModel getById(int id);
 
     List<ReportTagEnum> getTagEnums(List<String> tags);
+
+    List<ReportModel> getAllByUser(String token);
 }

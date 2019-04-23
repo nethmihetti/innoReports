@@ -33,7 +33,7 @@ class ReportServiceIMPL implements ReportService {
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<List<ReportModel>> response = restTemplate.exchange(
-                ReportUrls.ApiUrls.ClassificationUrls.TAG_URLS,
+                ReportUrls.ApiUrls.StorageUrls.REPORTS_URL,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<ReportModel>>(){});
@@ -71,5 +71,19 @@ class ReportServiceIMPL implements ReportService {
             result.add(ReportTagEnum.valueOf(tag.toUpperCase()));
         }
         return result;
+    }
+
+    @Override
+    public List<ReportModel> getAllByUser(String token) {
+        RestTemplate restTemplate = new RestTemplate();
+        Map<String, String> params = new HashMap<>();
+        params.put("token", token);
+        ResponseEntity<List<ReportModel>> response = restTemplate.exchange(
+                ReportUrls.ApiUrls.StorageUrls.USER_REPORTS_URL,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ReportModel>>(){},
+                params);
+        return response.getBody();
     }
 }

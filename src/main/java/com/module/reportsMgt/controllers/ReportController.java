@@ -52,8 +52,8 @@ public class ReportController {
 
     //http://localhost:8080/reports/all?user_id=1
     @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<ReportModel> getReportsByUser(@RequestParam("user_email") String userEmail) {
-        List<ReportModel> reports = reportService.getAllByUserEmail(userEmail);
+    public List<ReportModel> getReportsByUser(@RequestHeader String Authorization) {
+        List<ReportModel> reports = reportService.getAllByUser(Authorization);
         return reports;
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReportModel {
-
+    private int id;
     private String title;
     private String description;
     private String location;
@@ -85,5 +85,13 @@ public class ReportModel {
 
     public void setEntities(List<EntityModel> entities) {
         this.entities = entities;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
