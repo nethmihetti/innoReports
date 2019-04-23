@@ -31,7 +31,7 @@ public class ClassificationServiceIMPL implements ClassificationService {
         params.put("tags", tagsS);
 
         ResponseEntity<List<EntityModel>> response = restTemplate.exchange(
-                ReportUrls.ApiUruls.ClassificationUrls.TAG_URLS,
+                ReportUrls.ApiUrls.ClassificationUrls.TAG_URLS,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<EntityModel>>(){},

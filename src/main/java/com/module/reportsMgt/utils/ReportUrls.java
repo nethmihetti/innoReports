@@ -6,6 +6,8 @@ public class ReportUrls {
 
         String REPORTS_URL = "/reports";
 
+        String CREATE_REPORT_URL = "/reports/create";
+
         String REPORT_IMAGE = REPORTS_URL + "/image";
 
         String REPORT_URL = REPORTS_URL + "/{report_id}";
@@ -14,7 +16,7 @@ public class ReportUrls {
 
     }
 
-    public interface ApiUruls {
+    public interface ApiUrls {
         interface StorageUrls {
             String BASE_URL = "http://localhost:8080";
 
@@ -28,10 +30,17 @@ public class ReportUrls {
         }
 
         interface ClassificationUrls {
-            String BASE_URL = "http://10.240.20.170:8080";
+            String BASE_URL = "http://10.90.138.222:8081";
 
             String TAG_URLS = BASE_URL + "/classification/classify/{tags}";
         }
+
+        interface PersistanceUrls {
+            String BASE_URL = "http://10.90.138.222:8081";
+
+            String USER_URL = BASE_URL + "/innoreports/user/getUser";
+        }
     }
+
 
 }

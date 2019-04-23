@@ -4,22 +4,25 @@ import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.enums.ReportTagEnum;
 import com.module.reportsMgt.models.EntityModel;
 import com.module.reportsMgt.models.ReportModel;
+import com.module.reportsMgt.service.impl.FirebaseServiceIMPL;
 import com.module.reportsMgt.service.intr.ClassificationService;
+import com.module.reportsMgt.service.intr.FirebaseService;
 import com.module.reportsMgt.service.intr.ReportService;
-import com.module.reportsMgt.utils.FirebaseRepository;
+import com.module.reportsMgt.service.intr.UserService;
 import com.module.reportsMgt.utils.ReportChecker;
 import com.module.reportsMgt.utils.ReportUrls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+import javax.servlet.annotation.MultipartConfig;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @RestController
+@MultipartConfig(maxFileSize = 1024 * 1024 * 100, maxRequestSize = 1024 * 1024 * 100)
 public class ReportController {
 
     @Autowired
@@ -28,7 +31,17 @@ public class ReportController {
     @Autowired
     ClassificationService classificationService;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    FirebaseService firebaseService;
+
     //entry point for api calls should go here
+//    @PostConstruct
+//    public void init() {
+//        System.getenv().
+//    }
 
     @RequestMapping(path = ReportUrls.LocalUrls.REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 //    @RequestMapping(path = "/reports", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -50,14 +63,6 @@ public class ReportController {
         return report;
     }
 
-    @RequestMapping(path = ReportUrls.LocalUrls.REPORT_IMAGE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void saveImage(String filename) throws IOException, NoSuchAlgorithmException {
-        FirebaseRepository fr = new FirebaseRepository();
-        fr.saveFile("Банан.PNG");
-        System.out.println();
-    }
-
-
     @RequestMapping(path = "/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ReportModel getEntityExample() {
         ReportModel reportModel = new ReportModel();
@@ -78,17 +83,42 @@ public class ReportController {
         return reportModel;
     }
 
-    @RequestMapping(value = ReportUrls.LocalUrls.REPORTS_URL, method = RequestMethod.POST)
+    @RequestMapping(value = ReportUrls.LocalUrls.CREATE_REPORT_URL, method = RequestMethod.POST)
     public @ResponseBody
-//    ResponseEntity<ReportModel> createReport(@RequestParam String title, @RequestParam String description, @RequestParam String location, @RequestParam ReportTagEnumList tags) {
-    ReportModel createReport(@RequestBody ReportModel reportModel) {
+    ReportModel createReport(@RequestHeader String Authorization,
+                             @RequestParam("title") String title,
+                             @RequestParam("description") String description,
+                             @RequestParam("date") String date,
+                             @RequestParam("tags[]") List<String> tags,
+                             @RequestParam("image") MultipartFile image) {
+
+//        UserModel userModel = userService.getUser(Authorization);
+//
+//        if (userModel.getEmail() == null) {
+//            //no such user
+//            return null;
+//        }
+
+        ReportModel reportModel = new ReportModel();
+        reportModel.setTitle(title);
+        reportModel.setDescription(description);
+        reportModel.setDate(date);
+
+        reportModel.setTags(reportService.getTagEnums(tags));
         ReportChecker.checkTitle(reportModel);
-        ReportChecker.checkTitle(reportModel);
+        ReportChecker.checkDescription(reportModel);
+
         List<EntityModel> entities = classificationService.getServices(reportModel.getTags());
         reportModel.setEntities(entities);
         reportModel.setStatus(ReportStatusEnum.IN_PROGRESS);
+
+        String imagePath = firebaseService.saveImage(FirebaseServiceIMPL.convert(image));
+        reportModel.setImagePath(imagePath);
+
         ReportModel result = this.reportService.save(reportModel);
+
         return result;
     }
+
 
 }

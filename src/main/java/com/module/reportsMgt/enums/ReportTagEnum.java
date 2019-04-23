@@ -8,6 +8,6 @@ public enum ReportTagEnum {
     MEDICINE,
     GAS,
     PLUMBING,
-    FIREFIGHTER,
+    FIREFIGHT,
     HEALTH
 }
