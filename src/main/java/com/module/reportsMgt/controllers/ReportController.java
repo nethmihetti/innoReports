@@ -1,9 +1,10 @@
 package com.module.reportsMgt.controllers;
 
 import com.module.reportsMgt.enums.ReportStatusEnum;
-import com.module.reportsMgt.enums.ReportTagEnum;
+import com.module.reportsMgt.forms.ReportForm;
 import com.module.reportsMgt.models.EntityModel;
 import com.module.reportsMgt.models.ReportModel;
+import com.module.reportsMgt.models.UserModel;
 import com.module.reportsMgt.service.impl.FirebaseServiceIMPL;
 import com.module.reportsMgt.service.intr.ClassificationService;
 import com.module.reportsMgt.service.intr.FirebaseService;
@@ -52,45 +53,53 @@ public class ReportController {
 
     //http://localhost:8080/reports/all?user_id=1
     @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<ReportModel> getReportsByUser(@RequestHeader String Authorization) {
-        List<ReportModel> reports = reportService.getAllByUser(Authorization);
+    public List<ReportModel> getReportsByUser(@PathVariable("user_email") String email) {
+        List<ReportModel> reports = reportService.getAllByUserEmail(email);
         return reports;
     }
 
     @RequestMapping(path = ReportUrls.LocalUrls.REPORT_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ReportModel getReportById(@RequestParam("report_id") int reportId) {
+    public ReportModel getReportById(@PathVariable("report_id") String reportId) {
         ReportModel report = reportService.getById(reportId);
         return report;
     }
 
     @RequestMapping(path = "/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ReportModel getEntityExample() {
+    public String getEntityExample() {
         ReportModel reportModel = new ReportModel();
+        UserModel userModel = new UserModel();
+        userModel.setEmail("test@innopolis.ru");
+        reportModel.setSubmits(userModel);
         reportModel.setTitle("Title");
         reportModel.setDescription("Description");
         reportModel.setDate("Date");
         reportModel.setLocation("Horizontal Vertical");
         reportModel.setStatus(ReportStatusEnum.IN_PROGRESS);
         reportModel.setImagePath("Image Path");
-        reportModel.setEntities(new ArrayList<>());
-        reportModel.setImagePath("https://www.googleapis.com/download/storage/v1/b/innoreport-66483.appspot.com/o/%D0%91%D0%B0%D0%BD%D0%B0%D0%BD.PNG?generation=1555855353369369&alt=media");
+        reportModel.setBelongs(new ArrayList<>());
+        reportModel.setImagePath("https://www.googleapis.com/download/storage/v1/b/innoreport-66483.appspot.com/o/uQV0aHOUKItor.jpeg?generation=1556032025406165&alt=media");
+        reportModel.getTags().add("MEDICINE");
+        reportModel.getTags().add("ELECTRICITY");
+        reportModel.getTags().add("HEALTH");
 
-        reportModel.getTags().add(ReportTagEnum.MEDICINE);
-        reportModel.getTags().add(ReportTagEnum.ELECTRICITY);
-        reportModel.getTags().add(ReportTagEnum.HEALTH);
+        ReportForm reportForm = ReportForm.getReportForm(reportModel);
+
+        String result = this.reportService.saveForm(reportForm);
+
 //        reportModel.getTags().getTags().add(ReportTagEnum.MEDICINE);
 //        reportModel.getTags().getTags().add(ReportTagEnum.ELECTRICITY);
-        return reportModel;
+        return result;
     }
 
     @RequestMapping(value = ReportUrls.LocalUrls.CREATE_REPORT_URL, method = RequestMethod.POST)
     public @ResponseBody
-    ReportModel createReport(@RequestHeader String Authorization,
-                             @RequestParam("title") String title,
-                             @RequestParam("description") String description,
-                             @RequestParam("date") String date,
-                             @RequestParam("tags[]") List<String> tags,
-                             @RequestParam("image") MultipartFile image) {
+    String createReport(@RequestHeader String Authorization,
+                        @RequestHeader String UserEmail,
+                        @RequestParam("title") String title,
+                        @RequestParam("description") String description,
+                        @RequestParam("date") String date,
+                        @RequestParam("tags[]") List<String> tags,
+                        @RequestParam("image") MultipartFile image) {
 
 //        UserModel userModel = userService.getUser(Authorization);
 //
@@ -99,23 +108,32 @@ public class ReportController {
 //            return null;
 //        }
 
-        ReportModel reportModel = new ReportModel();
-        reportModel.setTitle(title);
-        reportModel.setDescription(description);
-        reportModel.setDate(date);
+        ReportForm reportForm = new ReportForm();
+        reportForm.setTitle(title);
+        reportForm.setDescription(description);
+        reportForm.setDate(date);
+        reportForm.setSubmits(UserEmail);
 
-        reportModel.setTags(reportService.getTagEnums(tags));
-        ReportChecker.checkTitle(reportModel);
-        ReportChecker.checkDescription(reportModel);
+        reportForm.setTags(tags);
+        ReportChecker.checkTitle(reportForm);
+        ReportChecker.checkDescription(reportForm);
 
-        List<EntityModel> entities = classificationService.getServices(reportModel.getTags());
-        reportModel.setEntities(entities);
-        reportModel.setStatus(ReportStatusEnum.IN_PROGRESS);
+        List<EntityModel> entities = classificationService.getServices(reportForm.getTags());
+
+        List<String> list = new ArrayList<>();
+        entities.forEach(entityModel -> {
+            list.add(entityModel.getName());
+        });
+
+        reportForm.setBelongs(list);
+        reportForm.setStatus(ReportStatusEnum.IN_PROGRESS);
 
         String imagePath = firebaseService.saveImage(FirebaseServiceIMPL.convert(image));
-        reportModel.setImagePath(imagePath);
+        reportForm.setImagePath(imagePath);
 
-        ReportModel result = this.reportService.save(reportModel);
+//        ReportForm reportForm = ReportForm.getReportForm(reportModel);
+
+        String result = this.reportService.saveForm(reportForm);
 
         return result;
     }

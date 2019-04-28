@@ -1,22 +1,25 @@
 package com.module.reportsMgt.service.intr;
 
 
-import com.module.reportsMgt.enums.ReportTagEnum;
+import com.module.reportsMgt.forms.ReportForm;
 import com.module.reportsMgt.models.ReportModel;
 
 import java.util.List;
 
 public interface ReportService {
 
-    public ReportModel save(ReportModel reportModel);
+    void init();
 
-    public List<ReportModel> getAll();
+    ReportModel save(ReportModel reportModel);
 
-//    public List<ReportModel> getAllByUserEmail(String email);
+    String saveForm(ReportForm reportForm);
 
-    public ReportModel getById(int id);
+    List<ReportModel> getAll();
 
-    List<ReportTagEnum> getTagEnums(List<String> tags);
+    List<ReportModel> getAllByUserEmail(String email);
+
+    ReportModel getById(String id);
+
 
     List<ReportModel> getAllByUser(String token);
 }

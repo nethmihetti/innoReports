@@ -1,13 +1,12 @@
-package com.module.reportsMgt.models;
+package com.module.reportsMgt.forms;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.module.reportsMgt.enums.ReportStatusEnum;
+import com.module.reportsMgt.models.ReportModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportModel {
-    private String rId;
+public class ReportForm {
     private String title;
     private String description;
     private String location;
@@ -15,17 +14,9 @@ public class ReportModel {
     private String date;
     private ReportStatusEnum status;
     private List<String> tags;
-    @JsonIgnore
-    private List<EntityModel> belongs;
-    @JsonIgnore
-    private UserModel submits;
-//    private ReportTagEnumList tags;
-
-    public ReportModel() {
-//        this.tags = new ReportTagEnumList();
-        this.tags = new ArrayList<>();
-        this.belongs = new ArrayList<>();
-    }
+    private String rId;
+    private List<String> belongs;
+    private String submits;
 
     public String getTitle() {
         return title;
@@ -59,6 +50,14 @@ public class ReportModel {
         this.imagePath = imagePath;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public ReportStatusEnum getStatus() {
         return status;
     }
@@ -75,20 +74,20 @@ public class ReportModel {
         this.tags = tags;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public List<EntityModel> getBelongs() {
+    public List<String> getBelongs() {
         return belongs;
     }
 
-    public void setBelongs(List<EntityModel> belongs) {
+    public void setBelongs(List<String> belongs) {
         this.belongs = belongs;
+    }
+
+    public String getSubmits() {
+        return submits;
+    }
+
+    public void setSubmits(String submits) {
+        this.submits = submits;
     }
 
     public String getrId() {
@@ -99,11 +98,21 @@ public class ReportModel {
         this.rId = rId;
     }
 
-    public UserModel getSubmits() {
-        return submits;
-    }
+    public static ReportForm getReportForm(ReportModel reportModel) {
+        ReportForm reportForm = new ReportForm();
+        reportForm.setTitle(reportModel.getTitle());
+        reportForm.setDescription(reportModel.getDescription());
+        reportForm.setDate(reportModel.getDate());
+        reportForm.setLocation(reportModel.getLocation());
+        reportForm.setImagePath(reportModel.getImagePath());
+        reportForm.setTags(reportModel.getTags());
+        reportForm.setStatus(reportModel.getStatus());
+        reportForm.setSubmits(reportModel.getSubmits().getEmail());
+        reportForm.setBelongs(new ArrayList<>());
+        reportModel.getBelongs().forEach(entityModel -> {
+            reportForm.getBelongs().add(entityModel.getName());
+        });
 
-    public void setSubmits(UserModel submits) {
-        this.submits = submits;
+        return reportForm;
     }
 }
