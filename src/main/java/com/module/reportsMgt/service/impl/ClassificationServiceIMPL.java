@@ -19,7 +19,7 @@ public class ClassificationServiceIMPL implements ClassificationService {
 
     @Override
     public void init() {
-        String env = System.getenv("ENTITY_PERSISTENCE_SERVICE_URL");
+        String env = System.getenv("CLASSIFICATION_SERVICE_URL");
         if (env != null) {
             this.BASE_URL = env;
             this.TAG_URLS = BASE_URL + "/classification/classify/{tags}";

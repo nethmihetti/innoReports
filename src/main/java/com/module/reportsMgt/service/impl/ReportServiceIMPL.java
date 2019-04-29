@@ -26,10 +26,10 @@ import java.util.Map;
 @Service
 class ReportServiceIMPL implements ReportService {
     private String BASE_URL = "http://10.90.138.222:5000";
-    private String REPORTS_URL = BASE_URL + "/getAllReports";
-    private String USER_REPORTS_URL = BASE_URL + "/getReportHistory";
-    private String REPORT_URL = BASE_URL + "/getReport";
-    private String REPORT_POST_URL = BASE_URL + "/createReport";
+    private String REPORTS_URL = BASE_URL + "/innoreports/report/getAllReports";
+    private String USER_REPORTS_URL = BASE_URL + "/innoreports/report/getReportHistory";
+    private String REPORT_URL = BASE_URL + "/innoreports/report/getReport";
+    private String REPORT_POST_URL = BASE_URL + "/innoreports/report/createReport";
 
    /* @Autowired
     AuthorizationRepository authorizationRepository;*/
@@ -37,7 +37,7 @@ class ReportServiceIMPL implements ReportService {
     @Override
     @PostConstruct
     public void init() {
-        String env = System.getenv("REPORT_PERSISTENCE_SERVICE_URL");
+        String env = System.getenv("PERSISTENCE_SERVICE_URL");
         if (env != null) {
             this.BASE_URL = env;
             this.REPORTS_URL = BASE_URL + "/innoreports/report/getAllReports";
