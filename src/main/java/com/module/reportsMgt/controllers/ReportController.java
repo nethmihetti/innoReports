@@ -8,7 +8,6 @@ import com.module.reportsMgt.service.impl.FirebaseServiceIMPL;
 import com.module.reportsMgt.service.intr.ClassificationService;
 import com.module.reportsMgt.service.intr.FirebaseService;
 import com.module.reportsMgt.service.intr.ReportService;
-import com.module.reportsMgt.service.intr.UserService;
 import com.module.reportsMgt.utils.ReportChecker;
 import com.module.reportsMgt.utils.ReportUrls;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,6 @@ public class ReportController {
 
     @Autowired
     ClassificationService classificationService;
-
-    @Autowired
-    UserService userService;
 
     @Autowired
     FirebaseService firebaseService;
