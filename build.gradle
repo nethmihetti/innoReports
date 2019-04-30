@@ -35,12 +35,12 @@ repositories {
 
 jar {
     baseName = 'InnoReports-REST-Server'
-    version = '1.0.0'
+    version =  '1.0.0'
 }
 
 bootJar {
-    baseName = 'gs-spring-boot'
-    version = '0.1.0'
+    baseName = 'InnoReports-REST-Server'
+    version =  '0.1.0'
 }
 
 
@@ -63,5 +63,5 @@ dependencies {
     //lombok
     compileOnly 'org.projectlombok:lombok:' + lombokVersion
     testCompileOnly 'org.projectlombok:lombok:' + lombokVersion
-    annotationProcessor 'org.projectlombok:lombok:' + lombokVersion
+    //annotationProcessor 'org.projectlombok:lombok:' + lombokVersion
 }
