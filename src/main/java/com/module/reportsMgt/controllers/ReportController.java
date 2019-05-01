@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +41,15 @@ public class ReportController {
 //        System.getenv().
 //    }
 
-    @RequestMapping(path = ReportUrls.LocalUrls.REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = ReportUrls.LocalUrls.REPORTS_URL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 //    @RequestMapping(path = "/reports", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<ReportModel> getAllReports() {
-        List<ReportModel> reports = reportService.getAll();
-        return reports;
+    public List<ReportModel> getAllReports(HttpServletRequest request) {
+        String method = request.getMethod();
+        if ("T".equals(method) || "GET".equals(method)) {
+            List<ReportModel> reports = reportService.getAll();
+            return reports;
+        }
+        return null;
     }
 
     //http://localhost:8080/reports/all?user_id=1
@@ -55,10 +60,14 @@ public class ReportController {
 //    }
 
     //http://localhost:8080/reports/all?user_id=1
-    @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<ReportModel> getReportsByUser(@RequestHeader String UserEmail) {
-        List<ReportModel> reports = reportService.getAllByUserEmail(UserEmail);
-        return reports;
+    @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<ReportModel> getReportsByUser(HttpServletRequest request, @RequestHeader String UserEmail) {
+        String method = request.getMethod();
+        if ("T".equals(method) || "GET".equals(method)) {
+            List<ReportModel> reports = reportService.getAllByUserEmail(UserEmail);
+            return reports;
+        }
+        return null;
     }
 
     @RequestMapping(path = ReportUrls.LocalUrls.REPORT_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -67,38 +76,10 @@ public class ReportController {
         return report;
     }
 
-//    @RequestMapping(path = "/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    public String getEntityExample() {
-//        ReportModel reportModel = new ReportModel();
-//        UserModel userModel = new UserModel();
-//        userModel.setEmail("test@innopolis.ru");
-//        reportModel.setSubmits(userModel);
-//        reportModel.setTitle("Title");
-//        reportModel.setDescription("Description");
-//        reportModel.setDate("Date");
-//        reportModel.setLocation("Horizontal Vertical");
-//        reportModel.setStatus(ReportStatusEnum.IN_PROGRESS);
-//        reportModel.setImagePath("Image Path");
-//        reportModel.setImagePath("https://www.googleapis.com/download/storage/v1/b/innoreport-66483.appspot.com/o/uQV0aHOUKItor.jpeg?generation=1556032025406165&alt=media");
-//        reportModel.getTags().add("MEDICINE");
-//        reportModel.getTags().add("ELECTRICITY");
-//        reportModel.getTags().add("HEALTH");
-//
-//        List<EntityModel> entities = classificationService.getServices(reportModel.getTags());
-//        reportModel.setBelongs(entities);
-//
-//        ReportForm reportForm = ReportForm.getReportForm(reportModel);
-//
-//        String result = this.reportService.saveForm(reportForm);
-//
-////        reportModel.getTags().getTags().add(ReportTagEnum.MEDICINE);
-////        reportModel.getTags().getTags().add(ReportTagEnum.ELECTRICITY);
-//        return result;
-//    }
-
-    @RequestMapping(value = ReportUrls.LocalUrls.CREATE_REPORT_URL, method = RequestMethod.POST)
+    @RequestMapping(value = ReportUrls.LocalUrls.CREATE_REPORT_URL)
     public @ResponseBody
-    String createReport(@RequestHeader String Authorization,
+    String createReport(HttpServletRequest request,
+                        @RequestHeader String Authorization,
                         @RequestHeader String UserEmail,
                         @RequestParam("title") String title,
                         @RequestParam("description") String description,
@@ -112,35 +93,40 @@ public class ReportController {
 //            //no such user
 //            return null;
 //        }
+        String method = request.getMethod();
 
-        ReportForm reportForm = new ReportForm();
-        reportForm.setTitle(title);
-        reportForm.setDescription(description);
-        reportForm.setDate(date);
-        reportForm.setSubmits(UserEmail);
+        if ("ST".equals(method) || "POST".equals(method)) {
 
-        reportForm.setTags(tags);
-        ReportChecker.checkTitle(reportForm);
-        ReportChecker.checkDescription(reportForm);
+            ReportForm reportForm = new ReportForm();
+            reportForm.setTitle(title);
+            reportForm.setDescription(description);
+            reportForm.setDate(date);
+            reportForm.setSubmits(UserEmail);
 
-        List<EntityModel> entities = classificationService.getServices(reportForm.getTags());
+            reportForm.setTags(tags);
+            ReportChecker.checkTitle(reportForm);
+            ReportChecker.checkDescription(reportForm);
 
-        List<String> list = new ArrayList<>();
-        entities.forEach(entityModel -> {
-            list.add(entityModel.getName());
-        });
+            List<EntityModel> entities = classificationService.getServices(reportForm.getTags());
 
-        reportForm.setBelongs(list);
-        reportForm.setStatus(ReportStatusEnum.IN_PROGRESS);
+            List<String> list = new ArrayList<>();
+            entities.forEach(entityModel -> {
+                list.add(entityModel.getName());
+            });
 
-        String imagePath = firebaseService.saveImage(FirebaseServiceIMPL.convert(image));
-        reportForm.setImagePath(imagePath);
+            reportForm.setBelongs(list);
+            reportForm.setStatus(ReportStatusEnum.RECEIVED);
+
+            String imagePath = firebaseService.saveImage(FirebaseServiceIMPL.convert(image));
+            reportForm.setImagePath(imagePath);
 
 //        ReportForm reportForm = ReportForm.getReportForm(reportModel);
 
-        String result = this.reportService.saveForm(reportForm);
+            String result = this.reportService.saveForm(reportForm);
 
-        return result;
+            return result;
+        }
+        return null;
     }
 
 

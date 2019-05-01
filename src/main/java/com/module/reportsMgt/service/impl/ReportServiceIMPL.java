@@ -108,7 +108,7 @@ class ReportServiceIMPL implements ReportService {
                 new ParameterizedTypeReference<String>() {
                 });
 
-        String json = response.getBody().replace("'", "\"");
+        String json = response.getBody().replace("None", "'None'").replace("'", "\"");
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -137,7 +137,7 @@ class ReportServiceIMPL implements ReportService {
                 },
                 params);
 
-        String json = response.getBody().replace("\"", "").replace("'", "\"");
+        String json = response.getBody().replace("None", "'None'").replace("'", "\"");
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -166,7 +166,8 @@ class ReportServiceIMPL implements ReportService {
                 },
                 params);
 
-        String json = response.getBody().replace("\"", "").replace("'", "\"");
+        String json = response.getBody().replace("None", "'None'").replace("'", "\"");
+
 
         ObjectMapper mapper = new ObjectMapper();
 
