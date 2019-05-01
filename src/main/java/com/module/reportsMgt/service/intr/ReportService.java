@@ -1,6 +1,7 @@
 package com.module.reportsMgt.service.intr;
 
 
+import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.forms.ReportForm;
 import com.module.reportsMgt.models.ReportModel;
 
@@ -22,4 +23,6 @@ public interface ReportService {
 
 
     List<ReportModel> getAllByUser(String token);
+
+    void updateStatus(String id, ReportStatusEnum status);
 }

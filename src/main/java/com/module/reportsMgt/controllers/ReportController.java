@@ -11,6 +11,7 @@ import com.module.reportsMgt.service.intr.ReportService;
 import com.module.reportsMgt.utils.ReportChecker;
 import com.module.reportsMgt.utils.ReportUrls;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -129,5 +130,9 @@ public class ReportController {
         return null;
     }
 
-
+    @RequestMapping(path = ReportUrls.LocalUrls.UPDATE_REPORT_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateReport(@PathVariable("report_id") String reportId, @PathVariable("new_status") ReportStatusEnum status){
+        reportService.updateStatus(reportId, status);
+    }
 }

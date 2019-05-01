@@ -3,6 +3,7 @@ package com.module.reportsMgt.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.forms.ReportForm;
 import com.module.reportsMgt.models.ReportModel;
 import com.module.reportsMgt.service.intr.ReportService;
@@ -30,6 +31,7 @@ class ReportServiceIMPL implements ReportService {
     private String USER_REPORTS_URL = BASE_URL + "/innoreports/report/getReportHistory";
     private String REPORT_URL = BASE_URL + "/innoreports/report/getReport";
     private String REPORT_POST_URL = BASE_URL + "/innoreports/report/createReport";
+    private String REPORT_UPDATE_URL = BASE_URL + "/innoreports/report/updateReport";
 
    /* @Autowired
     AuthorizationRepository authorizationRepository;*/
@@ -195,5 +197,14 @@ class ReportServiceIMPL implements ReportService {
                 },
                 params);
         return response.getBody();
+    }
+    @Override
+    public void updateStatus(String id, ReportStatusEnum status) {
+                new RestTemplate().exchange( //ResponseEntity<String> response =
+                REPORT_UPDATE_URL + "?rId=" + id
+                + "?status=" + status,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<String>(){});
     }
 }
