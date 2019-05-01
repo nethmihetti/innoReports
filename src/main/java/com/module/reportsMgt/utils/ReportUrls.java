@@ -12,5 +12,7 @@ public class ReportUrls {
 
         String USER_REPORTS_URL = REPORTS_URL + "/userReports";
 
+        String UPDATE_REPORT_URL = REPORTS_URL + "/updateReport/{report_id}/{new_status}";
+
     }
 }
