@@ -5,7 +5,7 @@ import com.module.reportsMgt.forms.ReportForm;
 public class ReportChecker {
 
     static final int TITLE_LENGTH = 50;
-    static final int DESC_LENGTH = 500;
+    static final int DESC_LENGTH = 600;
 
     public static void checkTitle(ReportForm reportForm) {
         if (reportForm.getTitle().length() > TITLE_LENGTH) {

@@ -10,7 +10,7 @@ public class ReportUrls {
 
         String REPORT_URL = REPORTS_URL + "/getReport/{report_id}";
 
-        String USER_REPORTS_URL = REPORTS_URL + "/userReports/{user_email}";
+        String USER_REPORTS_URL = REPORTS_URL + "/userReports";
 
     }
 }

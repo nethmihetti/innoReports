@@ -22,6 +22,7 @@ import java.util.List;
 
 @RestController
 @MultipartConfig(maxFileSize = 1024 * 1024 * 100, maxRequestSize = 1024 * 1024 * 100)
+@CrossOrigin(origins = "http://localhost:8080")
 public class ReportController {
 
     @Autowired
@@ -47,9 +48,16 @@ public class ReportController {
     }
 
     //http://localhost:8080/reports/all?user_id=1
+//    @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    public List<ReportModel> getReportsByUser(@PathVariable("user_email") String email) {
+//        List<ReportModel> reports = reportService.getAllByUserEmail(email);
+//        return reports;
+//    }
+
+    //http://localhost:8080/reports/all?user_id=1
     @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<ReportModel> getReportsByUser(@PathVariable("user_email") String email) {
-        List<ReportModel> reports = reportService.getAllByUserEmail(email);
+    public List<ReportModel> getReportsByUser(@RequestHeader String UserEmail) {
+        List<ReportModel> reports = reportService.getAllByUserEmail(UserEmail);
         return reports;
     }
 
