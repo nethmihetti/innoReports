@@ -21,8 +21,7 @@ public interface ReportService {
 
     ReportModel getById(String id);
 
-
     List<ReportModel> getAllByUser(String token);
 
-    void updateStatus(String id, ReportStatusEnum status);
+    String updateStatus(String id, ReportStatusEnum status);
 }

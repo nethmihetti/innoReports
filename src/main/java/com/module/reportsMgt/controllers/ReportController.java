@@ -132,7 +132,7 @@ public class ReportController {
 
     @RequestMapping(path = ReportUrls.LocalUrls.UPDATE_REPORT_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateReport(@PathVariable("report_id") String reportId, @PathVariable("new_status") ReportStatusEnum status){
-        reportService.updateStatus(reportId, status);
+    public @ResponseBody String updateReport(@PathVariable("report_id") String reportId, @PathVariable("new_status") ReportStatusEnum status){
+        return reportService.updateStatus(reportId, status);
     }
 }

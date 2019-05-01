@@ -46,6 +46,8 @@ class ReportServiceIMPL implements ReportService {
             this.USER_REPORTS_URL = BASE_URL + "/innoreports/report/getReportHistory";
             this.REPORT_URL = BASE_URL + "/innoreports/report/getReport";
             this.REPORT_POST_URL = BASE_URL + "/innoreports/report/createReport";
+            this.REPORT_UPDATE_URL = BASE_URL + "/innoreports/report/updateReport";
+
         }
     }
 
@@ -168,8 +170,12 @@ class ReportServiceIMPL implements ReportService {
                 },
                 params);
 
-        String json = response.getBody().replace("None", "'None'").replace("'", "\"");
+        String json = response.getBody();
 
+
+        json = json.replace("None", "'None'");
+        json = json.replace("\"", "");
+        json = json.replace("'", "\"");
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -199,12 +205,38 @@ class ReportServiceIMPL implements ReportService {
         return response.getBody();
     }
     @Override
-    public void updateStatus(String id, ReportStatusEnum status) {
-                new RestTemplate().exchange( //ResponseEntity<String> response =
-                REPORT_UPDATE_URL + "?rId=" + id
-                + "?status=" + status,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<String>(){});
+    public String updateStatus(String id, ReportStatusEnum status) {
+        ReportModel reportModel = getById(id);
+        reportModel.setStatus(status);
+
+        ReportForm reportForm = ReportForm.getReportForm(reportModel);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonReport = null;
+        try {
+            jsonReport = mapper.writeValueAsString(reportForm);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        RequestEntity<String> requestEntity = null;
+        try {
+            requestEntity = RequestEntity.post(new URL(REPORT_UPDATE_URL).toURI()).contentType(MediaType.APPLICATION_JSON).body(jsonReport);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        RestTemplate restTemplate = new RestTemplate();
+        assert requestEntity != null;
+        ResponseEntity<String> result = restTemplate.exchange(requestEntity, String.class);
+        return result.getBody();
+//                new RestTemplate().exchange( //ResponseEntity<String> response =
+//                REPORT_UPDATE_URL + "?rId=" + id
+//                + "&status=" + status,
+//                HttpMethod.POST,
+//                null,
+//                new ParameterizedTypeReference<String>(){});
     }
 }

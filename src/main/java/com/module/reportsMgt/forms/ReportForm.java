@@ -107,7 +107,9 @@ public class ReportForm {
         reportForm.setImagePath(reportModel.getImagePath());
         reportForm.setTags(reportModel.getTags());
         reportForm.setStatus(reportModel.getStatus());
-        reportForm.setSubmits(reportModel.getSubmits().getEmail());
+        if (reportModel.getSubmits() != null) {
+            reportForm.setSubmits(reportModel.getSubmits().getEmail());
+        }
         reportForm.setBelongs(new ArrayList<>());
         reportModel.getBelongs().forEach(entityModel -> {
             reportForm.getBelongs().add(entityModel.getName());
