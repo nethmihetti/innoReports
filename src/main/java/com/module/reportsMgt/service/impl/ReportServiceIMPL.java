@@ -61,13 +61,8 @@ class ReportServiceIMPL implements ReportService {
 
             RequestEntity<String> requestEntity = RequestEntity.post(new URL(REPORT_POST_URL).toURI()).contentType(MediaType.APPLICATION_JSON).body(jsonReport);
             ResponseEntity<ReportModel> result = restTemplate.exchange(requestEntity, ReportModel.class);
-//            ReportModel result = restTemplate.postForObject(ReportUrls.ApiUrls.StorageUrls.REPORT_POST_URL, reportModel, ReportModel.class);
             return result.getBody();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
+        } catch (URISyntaxException | MalformedURLException | JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;
@@ -83,13 +78,8 @@ class ReportServiceIMPL implements ReportService {
 
             RequestEntity<String> requestEntity = RequestEntity.post(new URL(REPORT_POST_URL).toURI()).contentType(MediaType.APPLICATION_JSON).body(jsonReport);
             ResponseEntity<String> result = restTemplate.exchange(requestEntity, String.class);
-//            ReportModel result = restTemplate.postForObject(ReportUrls.ApiUrls.StorageUrls.REPORT_POST_URL, reportModel, ReportModel.class);
             return result.getBody();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
+        } catch (URISyntaxException | MalformedURLException | JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;
@@ -98,12 +88,6 @@ class ReportServiceIMPL implements ReportService {
     @Override
     public List<ReportModel> getAll() {
         RestTemplate restTemplate = new RestTemplate();
-
-//        ResponseEntity<List<ReportModel>> response = restTemplate.exchange(
-//                ReportUrls.ApiUrls.StorageUrls.REPORTS_URL,
-//                HttpMethod.GET,
-//                null,
-//                new ParameterizedTypeReference<List<ReportModel>>(){});
 
         ResponseEntity<String> response = restTemplate.exchange(
                 REPORTS_URL,
@@ -204,24 +188,25 @@ class ReportServiceIMPL implements ReportService {
                 params);
         return response.getBody();
     }
+
     @Override
     public String updateStatus(String id, ReportStatusEnum status) {
-        ReportModel reportModel = getById(id);
-        reportModel.setStatus(status);
-
-        ReportForm reportForm = ReportForm.getReportForm(reportModel);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("rId", id);
+        params.put("status", status.name());
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonReport = null;
         try {
-            jsonReport = mapper.writeValueAsString(reportForm);
+            jsonReport = mapper.writeValueAsString(params);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
+
         RequestEntity<String> requestEntity = null;
         try {
-            requestEntity = RequestEntity.post(new URL(REPORT_UPDATE_URL).toURI()).contentType(MediaType.APPLICATION_JSON).body(jsonReport);
+            requestEntity = RequestEntity.put(new URL(REPORT_UPDATE_URL).toURI()).contentType(MediaType.APPLICATION_JSON).body(jsonReport);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -232,11 +217,5 @@ class ReportServiceIMPL implements ReportService {
         assert requestEntity != null;
         ResponseEntity<String> result = restTemplate.exchange(requestEntity, String.class);
         return result.getBody();
-//                new RestTemplate().exchange( //ResponseEntity<String> response =
-//                REPORT_UPDATE_URL + "?rId=" + id
-//                + "&status=" + status,
-//                HttpMethod.POST,
-//                null,
-//                new ParameterizedTypeReference<String>(){});
     }
 }

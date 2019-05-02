@@ -115,6 +115,10 @@ public class ReportForm {
             reportForm.getBelongs().add(entityModel.getName());
         });
 
+        if (reportModel.getrId() != null) {
+            reportForm.setrId(reportModel.getrId());
+        }
+
         return reportForm;
     }
 }

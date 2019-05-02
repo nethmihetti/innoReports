@@ -36,12 +36,6 @@ public class ReportController {
     @Autowired
     FirebaseService firebaseService;
 
-    //entry point for api calls should go here
-//    @PostConstruct
-//    public void init() {
-//        System.getenv().
-//    }
-
     @RequestMapping(path = ReportUrls.LocalUrls.REPORTS_URL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 //    @RequestMapping(path = "/reports", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<ReportModel> getAllReports(HttpServletRequest request) {
@@ -52,13 +46,6 @@ public class ReportController {
         }
         return null;
     }
-
-    //http://localhost:8080/reports/all?user_id=1
-//    @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    public List<ReportModel> getReportsByUser(@PathVariable("user_email") String email) {
-//        List<ReportModel> reports = reportService.getAllByUserEmail(email);
-//        return reports;
-//    }
 
     //http://localhost:8080/reports/all?user_id=1
     @RequestMapping(path = ReportUrls.LocalUrls.USER_REPORTS_URL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -88,12 +75,6 @@ public class ReportController {
                         @RequestParam("tags[]") List<String> tags,
                         @RequestParam("image") MultipartFile image) {
 
-//        UserModel userModel = userService.getUser(Authorization);
-//
-//        if (userModel.getEmail() == null) {
-//            //no such user
-//            return null;
-//        }
         String method = request.getMethod();
 
         if ("ST".equals(method) || "POST".equals(method)) {
@@ -121,8 +102,6 @@ public class ReportController {
             String imagePath = firebaseService.saveImage(FirebaseServiceIMPL.convert(image));
             reportForm.setImagePath(imagePath);
 
-//        ReportForm reportForm = ReportForm.getReportForm(reportModel);
-
             String result = this.reportService.saveForm(reportForm);
 
             return result;
@@ -130,9 +109,10 @@ public class ReportController {
         return null;
     }
 
-    @RequestMapping(path = ReportUrls.LocalUrls.UPDATE_REPORT_URL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = ReportUrls.LocalUrls.UPDATE_REPORT_URL, method = RequestMethod.PATCH)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody String updateReport(@PathVariable("report_id") String reportId, @PathVariable("new_status") ReportStatusEnum status){
-        return reportService.updateStatus(reportId, status);
+        String result = reportService.updateStatus(reportId, status);
+        return result;
     }
 }
