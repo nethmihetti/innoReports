@@ -5,6 +5,7 @@ public class EntityModel {
     private String email;
     private String address;
     private String[] tags;
+    private String eId;
 
     public EntityModel(String name, String email, String address, String[] tags) {
         this.name = name;
@@ -46,5 +47,13 @@ public class EntityModel {
 
     public void setTags(String[] tags) {
         this.tags = tags;
+    }
+
+    public String geteId() {
+        return eId;
+    }
+
+    public void seteId(String eId) {
+        this.eId = eId;
     }
 }

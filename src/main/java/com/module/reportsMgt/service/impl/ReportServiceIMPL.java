@@ -207,9 +207,7 @@ class ReportServiceIMPL implements ReportService {
         RequestEntity<String> requestEntity = null;
         try {
             requestEntity = RequestEntity.put(new URL(REPORT_UPDATE_URL).toURI()).contentType(MediaType.APPLICATION_JSON).body(jsonReport);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
+        } catch (URISyntaxException | MalformedURLException e) {
             e.printStackTrace();
         }
 

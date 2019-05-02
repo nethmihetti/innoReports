@@ -73,7 +73,8 @@ public class ReportController {
                         @RequestParam("description") String description,
                         @RequestParam("date") String date,
                         @RequestParam("tags[]") List<String> tags,
-                        @RequestParam("image") MultipartFile image) {
+                        @RequestParam("image") MultipartFile image,
+                        @RequestParam("location") String location) {
 
         String method = request.getMethod();
 
@@ -84,6 +85,7 @@ public class ReportController {
             reportForm.setDescription(description);
             reportForm.setDate(date);
             reportForm.setSubmits(UserEmail);
+            reportForm.setLocation(location);
 
             reportForm.setTags(tags);
             ReportChecker.checkTitle(reportForm);
@@ -93,7 +95,7 @@ public class ReportController {
 
             List<String> list = new ArrayList<>();
             entities.forEach(entityModel -> {
-                list.add(entityModel.getName());
+                list.add(entityModel.geteId());
             });
 
             reportForm.setBelongs(list);

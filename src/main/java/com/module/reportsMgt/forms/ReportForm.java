@@ -14,9 +14,15 @@ public class ReportForm {
     private String date;
     private ReportStatusEnum status;
     private List<String> tags;
-    private String rId;
+//    private String rId;
     private List<String> belongs;
     private String submits;
+
+    public ReportForm() {
+//        this.rId = "";
+        this.tags = new ArrayList<>();
+        this.belongs = new ArrayList<>();
+    }
 
     public String getTitle() {
         return title;
@@ -90,13 +96,13 @@ public class ReportForm {
         this.submits = submits;
     }
 
-    public String getrId() {
-        return rId;
-    }
-
-    public void setrId(String rId) {
-        this.rId = rId;
-    }
+//    public String getrId() {
+//        return rId;
+//    }
+//
+//    public void setrId(String rId) {
+//        this.rId = rId;
+//    }
 
     public static ReportForm getReportForm(ReportModel reportModel) {
         ReportForm reportForm = new ReportForm();
@@ -114,10 +120,6 @@ public class ReportForm {
         reportModel.getBelongs().forEach(entityModel -> {
             reportForm.getBelongs().add(entityModel.getName());
         });
-
-        if (reportModel.getrId() != null) {
-            reportForm.setrId(reportModel.getrId());
-        }
 
         return reportForm;
     }
