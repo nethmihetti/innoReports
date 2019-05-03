@@ -18,14 +18,12 @@ public class FirebaseServiceIMPL implements FirebaseService {
     FirebaseRepository firebaseRepository;
 
     public String saveImage(MultipartFile file) {
-        File mFile = convert(file);
-        return saveImage(mFile);
-    }
-
-    public String saveImage(File file) {
-        String filename = generateRandomFileName() + getFileExtension(file.getName());
-
-        return firebaseRepository.saveImage(file, filename);
+        String filename = generateRandomFileName() + getFileExtension(file.getOriginalFilename());
+        try {
+            return firebaseRepository.saveImage(file.getBytes(), filename);
+        } catch (IOException e) {
+            return e.getMessage();
+        }
     }
 
     public static String getFileExtension(final String path) {

@@ -4,7 +4,6 @@ import com.module.reportsMgt.enums.ReportStatusEnum;
 import com.module.reportsMgt.forms.ReportForm;
 import com.module.reportsMgt.models.EntityModel;
 import com.module.reportsMgt.models.ReportModel;
-import com.module.reportsMgt.service.impl.FirebaseServiceIMPL;
 import com.module.reportsMgt.service.intr.ClassificationService;
 import com.module.reportsMgt.service.intr.FirebaseService;
 import com.module.reportsMgt.service.intr.ReportService;
@@ -95,13 +94,13 @@ public class ReportController {
 
             List<String> list = new ArrayList<>();
             entities.forEach(entityModel -> {
-                list.add(entityModel.geteId());
+                list.add(entityModel.getEid());
             });
 
             reportForm.setBelongs(list);
             reportForm.setStatus(ReportStatusEnum.RECEIVED);
 
-            String imagePath = firebaseService.saveImage(FirebaseServiceIMPL.convert(image));
+            String imagePath = firebaseService.saveImage(image);
             reportForm.setImagePath(imagePath);
 
             String result = this.reportService.saveForm(reportForm);

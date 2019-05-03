@@ -34,16 +34,12 @@ public class FirebaseRepositoryIMPL implements FirebaseRepository {
     }
 
     @Override
-    public String saveImage(File image, String name) {
-        try {
-            InputStream content = new FileInputStream(image);
-            Bucket bucket = StorageClient.getInstance().bucket();
-            Blob blob = bucket.create(name, content);
+    public String saveImage(byte[] image, String name) {
+        Bucket bucket = StorageClient.getInstance().bucket();
+        Blob blob = bucket.create(name, image);
 
-            return blob.getMediaLink();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return blob.getMediaLink();
     }
+
+
 }

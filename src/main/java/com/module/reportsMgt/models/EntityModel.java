@@ -1,17 +1,21 @@
 package com.module.reportsMgt.models;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class EntityModel {
     private String name;
     private String email;
     private String address;
     private String[] tags;
-    private String eId;
+    @JsonProperty("eId")
+    private String eid;
 
-    public EntityModel(String name, String email, String address, String[] tags) {
+    public EntityModel(String name, String email, String address, String[] tags, String eid) {
         this.name = name;
         this.email = email;
         this.address = address;
         this.tags = tags;
+        this.eid = eid;
     }
 
     public EntityModel() {
@@ -49,11 +53,11 @@ public class EntityModel {
         this.tags = tags;
     }
 
-    public String geteId() {
-        return eId;
+    public String getEid() {
+        return eid;
     }
 
-    public void seteId(String eId) {
-        this.eId = eId;
+    public void setEid(String eid) {
+        this.eid = eid;
     }
 }
